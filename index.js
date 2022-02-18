@@ -1,9 +1,14 @@
 const mongoose =require('mongoose');
 const express =require('express');
 const expressValidator=require('express-validator')
+const cookieparser =require('cookie-parser')
 
 //Import Routes
-const userRouters=require('./route/users')
+const authRouters=require('./route/auth')
+const userRouters=require('./route/user')
+const categoryRouters=require('./route/categories')
+const productRouters=require('./route/product')
+
 //Config app
 const app=express();
 require('dotenv').config();
@@ -14,6 +19,13 @@ mongoose.connect(process.env.DATABASE)
 //routes middleware    
 app.use(express.json())
 app.use(expressValidator()) 
-app.use('/api/users',userRouters)
+app.use(cookieparser())
+app.use('/api',authRouters)
+app.use('/api',userRouters)
+app.use('/api/category',categoryRouters)
+app.use('/api/product',productRouters)
+
+
+
 const port =process.env.PORT ||3000
 app.listen(port,()=>console.log(`the app listening the ${port} ..`));
